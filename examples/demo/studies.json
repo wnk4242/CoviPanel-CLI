@@ -1,0 +1,20 @@
+[
+  {
+    "studyId": "1",
+    "title": "Synthetic example: vitamin C for adult cold treatment",
+    "abstract": "This fictional randomized trial assigned adults with a common cold to vitamin C or placebo after symptom onset. Symptom duration was measured.",
+    "illustrativeDecision": "Include"
+  },
+  {
+    "studyId": "2",
+    "title": "Synthetic example: vitamin supplements and cold prevention",
+    "abstract": "This fictional observational study followed healthy adults taking supplements to prevent future colds.",
+    "illustrativeDecision": "Exclude"
+  },
+  {
+    "studyId": "3",
+    "title": "Synthetic example: treatment for cold symptoms",
+    "abstract": "This fictional report mentions vitamin C treatment but does not describe the allocation method, comparison group, or participant ages.",
+    "illustrativeDecision": "Maybe"
+  }
+]

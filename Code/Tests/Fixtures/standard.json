@@ -1,0 +1,21 @@
+{
+  "dataset": "standard-review",
+  "enabled": false,
+  "criteriaApproved": false,
+  "reviewUrl": "https://app.covidence.org/reviews/900001/review_studies/screen?filter=vote_required_from",
+  "reviewerName": "Fixture Reviewer",
+  "headless": false,
+  "timeoutMs": 30000,
+  "criteriaVersion": "fixture-v1",
+  "criteria": {
+    "inclusion": [],
+    "exclusion": [],
+    "interpretation": []
+  },
+  "promptFile": "Code/Tests/Fixtures/legacy-screening-prompt.txt",
+  "openai": {
+    "model": "fixture-model",
+    "maxOutputTokens": 1600,
+    "timeoutMs": 60000
+  }
+}

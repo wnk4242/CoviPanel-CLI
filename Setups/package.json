@@ -1,0 +1,48 @@
+{
+  "name": "covipanel-cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local Covidence screening worker with audited decisions and persistent queues",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node ../Code/Application/launcher.js",
+    "discover": "node ../Code/Application/discover.js",
+    "worker": "node ../Code/Application/worker.js",
+    "export:history": "node ../Code/Tools/Spreadsheets/export-history.mjs",
+    "test": "node --test ../Code/Tests/*.test.js",
+    "setup": "node ../Code/Application/setup.js",
+    "backup": "node ../Code/Tools/maintenance.mjs backup",
+    "restore": "node ../Code/Tools/maintenance.mjs restore",
+    "backup:project": "node ../Code/Tools/project-maintenance.mjs backup",
+    "restore:project": "node ../Code/Tools/project-maintenance.mjs restore",
+    "evaluate": "node ../Code/Tools/evaluate.mjs",
+    "benchmark": "node ../Code/Tools/benchmark.mjs",
+    "format": "prettier --config ../Code/Tools/Config/.prettierrc.json --write \"../Code/**/*.js\" \"../Code/**/*.mjs\"",
+    "format:check": "prettier --config ../Code/Tools/Config/.prettierrc.json --check \"../Code/**/*.js\" \"../Code/**/*.mjs\"",
+    "lint": "node ../Code/Tools/lint.mjs",
+    "check:types": "tsc --project ../Code/Tools/Config/jsconfig.json",
+    "check": "npm run format:check && npm run lint && npm run check:types && npm test"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "exceljs": "4.4.0",
+    "openai": "^7.15.0",
+    "playwright": "^1.58.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.2",
+    "eslint": "10.10.0",
+    "globals": "16.5.0",
+    "prettier": "3.9.6",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "11.1.1"
+    }
+  }
+}

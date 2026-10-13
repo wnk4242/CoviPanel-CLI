@@ -1,0 +1,10 @@
+{
+  "enabled": false,
+  "criteriaApproved": false,
+  "description": "Synthetic teaching example only; paste into a demo project and review before use.",
+  "promptSections": {
+    "inclusion": "Randomized trials comparing vitamin C with placebo for treatment of the common cold in adults.",
+    "exclusion": "Reviews, observational studies, prevention-only studies, and studies in children.",
+    "responseFormat": "Give a brief explanation of the decision and identify any eligibility uncertainty."
+  }
+}

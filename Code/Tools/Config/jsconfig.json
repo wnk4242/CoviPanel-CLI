@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": ["node"],
+    "typeRoots": ["../../../Setups/node_modules/@types"],
+    "maxNodeModuleJsDepth": 0,
+    "skipLibCheck": true
+  },
+  "include": [
+    "../../Application/config.js",
+    "../../Application/database.js",
+    "../../Application/decisions.js",
+    "../../Application/defaults.js",
+    "../../Application/evaluation.js",
+    "../../Application/prompt-sections.js",
+    "../../Application/response-contract.js",
+    "../../Application/response-format.js",
+    "../../Application/screening-device.js",
+    "../../Application/states.js"
+  ],
+  "exclude": ["../../../Setups/node_modules"]
+}

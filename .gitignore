@@ -1,0 +1,22 @@
+# Generated application state and credentials
+/Covidence Projects/
+/Setups/Settings/
+/Setups/State/
+/Setups/Browser Login/
+/Setups/Backups/
+**/node_modules/
+**/.env
+**/.env.*
+*.sqlite*
+*.db
+*.db-wal
+*.db-shm
+*.xlsx
+*.log
+**/Backups/
+**/Browser Login/
+**/.cache/
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
