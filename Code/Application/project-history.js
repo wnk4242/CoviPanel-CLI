@@ -1,5 +1,6 @@
 import { DatabaseSync } from 'node:sqlite';
 import path from 'node:path';
+import { decisionMap } from './decisions.js';
 import { mkdir, writeFile, rename, rm } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { reviewFolder } from './config.js';
@@ -22,6 +23,18 @@ function batchName(job, jobs) {
   return `Batch ${String(list.findIndex((j) => j.id === job.id) + 1).padStart(2, '0')} (${localTime(job.created_at)})`;
 }
 const ordered = (a, b) => (a.createdAt || '').localeCompare(b.createdAt || '');
+// Bind local history edits to the retained source, never to a later screening.
+export function historySourceHash(study) {
+  return hash({
+    id: study.id,
+    title: study.title,
+    decision: study.decision,
+    rationale: study.rationale,
+    runId: study.recommendation?.record.runId || null,
+    voteId: study.vote?.attemptId || null,
+    importedRow: study.importedRow || null,
+  });
+}
 const friendly = (value) =>
   ({
     confirmed: 'Submitted and verified',
@@ -236,14 +249,14 @@ export function buildProjectHistory({
     });
   // Editorial wording belongs to the export, not the original recommendation.
   // Bind each edit to its exact source so a later screening cannot inherit it.
-  const rationaleEdits = new Map();
+  const historyEdits = new Map();
   for (const event of [...activity].sort(
     (a, b) =>
       a.created_at.localeCompare(b.created_at) ||
       (a.event_id || '').localeCompare(b.event_id || ''),
   )) {
     if (
-      event.kind !== 'history_rationales_edited' ||
+      !['history_rationales_edited', 'history_studies_edited'].includes(event.kind) ||
       event.review_url !== key ||
       !Array.isArray(event.data?.edits)
     )
@@ -252,11 +265,12 @@ export function buildProjectHistory({
       if (
         !edit ||
         typeof edit.rationale !== 'string' ||
-        !edit.rationale.trim() ||
+        (event.kind === 'history_rationales_edited' && !edit.rationale.trim()) ||
         edit.rationale.length > 32767
       )
         continue;
-      rationaleEdits.set(edit.runId, edit);
+      if (!historyEdits.has(edit.studyId)) historyEdits.set(edit.studyId, []);
+      historyEdits.get(edit.studyId).push({ ...edit, kind: event.kind });
     }
   }
   // Workbook imports are reporting evidence, never reusable AI answers or vote claims.
@@ -298,16 +312,31 @@ export function buildProjectHistory({
   const rows = [
     ['Study number', 'Title', 'Decision', 'Rationale'],
     ...studies.map((s) => {
-      if (s.importedRow) return [...s.importedRow];
-      const edit = rationaleEdits.get(s.recommendation?.record.runId);
-      const rationale =
-        edit?.studyId === s.id &&
-        edit.decision === s.decision &&
-        edit.sourceHash === hash({ title: s.title, rationale: s.rationale })
-          ? edit.rationale
-          : s.rationale;
-      s.exportRationale = rationale;
-      return [s.id, s.title, s.decision, rationale];
+      s.exportDecision = s.decision;
+      s.exportRationale = s.rationale;
+      for (const edit of historyEdits.get(s.id) || []) {
+        if (edit.kind === 'history_rationales_edited') {
+          if (
+            !edit.runId ||
+            edit.runId !== s.recommendation?.record.runId ||
+            edit.decision !== s.decision ||
+            edit.sourceHash !== hash({ title: s.title, rationale: s.rationale })
+          )
+            continue;
+          s.exportRationale = reviewedResponse(edit.rationale, s.decision, s.exportDecision);
+        } else {
+          if (
+            edit.sourceHash !== historySourceHash(s) ||
+            !Object.hasOwn(decisionMap, edit.decision)
+          )
+            continue;
+          s.exportDecision = edit.decision;
+          s.exportRationale = edit.rationale;
+        }
+        s.historyEdited = true;
+      }
+      if (s.importedRow && !s.historyEdited) return [...s.importedRow];
+      return [s.id, s.title, s.exportDecision, s.exportRationale];
     }),
   ];
   const settingNumbers = new Map();
@@ -368,7 +397,7 @@ export function buildProjectHistory({
     lines.push(
       '',
       `Study #${s.id}: ${s.title || 'Title not yet read'}`,
-      `Decision: ${s.decision || 'Not decided'}`,
+      `Decision: ${s.exportDecision || 'Not decided'}`,
       `Status: ${s.status}`,
       ...(s.manualVote
         ? [
@@ -530,7 +559,15 @@ export function buildProjectHistory({
           (s) => `Study #${s.studyId} was blocked from reprocessing: ${s.reason}`,
         ),
       );
-    else lines.push(e.data.error || e.data.message || 'Event details retained in the program.');
+    else if (e.kind === 'history_studies_edited') {
+      for (const edit of e.data.edits || [])
+        lines.push(
+          `Study #${edit.studyId}: local history edit; online vote and batch approval unchanged.`,
+          `Previous decision: ${edit.previousDecision}. New decision: ${edit.decision}.`,
+          `Previous rationale: ${edit.previousRationale}`,
+          `New rationale: ${edit.rationale}`,
+        );
+    } else lines.push(e.data.error || e.data.message || 'Event details retained in the program.');
   }
   lines.push('', 'SCREENING CRITERIA USED');
   const seenSettings = new Set();

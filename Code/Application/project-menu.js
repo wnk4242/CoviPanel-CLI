@@ -127,6 +127,7 @@ async function runProjectMenu(question, project, actions, { show = showScreen } 
         '4. Open project folder',
         '5. Back up project records',
         '6. Review unfinished studies',
+        '7. Search study history',
         '0. Back to main menu',
       ],
       '',
@@ -142,6 +143,7 @@ async function runProjectMenu(question, project, actions, { show = showScreen } 
       4: 'open',
       5: 'backup',
       6: 'unfinished',
+      7: 'search',
     }[choice];
     if (!action) continue;
     try {

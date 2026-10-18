@@ -144,6 +144,15 @@ try {
       });
     },
     settings: editProject,
+    search: async (project) => {
+      const { searchProjectHistory } = await import('./study-search.js');
+      const { acquireWorkerLock } = await import('./queue-store.js');
+      terminal?.close();
+      terminal = null;
+      await searchProjectHistory(project, databasePath, {
+        lock: () => acquireWorkerLock(dataDir),
+      });
+    },
     unfinished: async (project) => {
       const { reviewUnfinished } = await import('./unfinished-review.js');
       await reviewUnfinished(project, question, {

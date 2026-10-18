@@ -99,6 +99,7 @@ test('main and project menus dispatch every action to the chosen project, retain
     '4',
     '5',
     '6',
+    '7',
     '2',
     '1',
     '0',
@@ -121,6 +122,7 @@ test('main and project menus dispatch every action to the chosen project, retain
       open: async (p) => calls.push(['open', p.reviewUrl]),
       backup: async (p) => calls.push(['backup', p.reviewUrl]),
       unfinished: async (p) => calls.push(['unfinished', p.reviewUrl]),
+      search: async (p) => calls.push(['search', p.reviewUrl]),
       settings: async (p) => {
         calls.push(['settings', p.reviewUrl]);
         return { ...p, name: 'Renamed' };
@@ -131,7 +133,7 @@ test('main and project menus dispatch every action to the chosen project, retain
   );
   assert.deepEqual(
     calls.map(([name]) => name),
-    ['export', 'open', 'backup', 'unfinished', 'settings', 'start'],
+    ['export', 'open', 'backup', 'unfinished', 'search', 'settings', 'start'],
   );
   assert.ok(calls.every(([, url]) => url === selected.reviewUrl));
   assert.ok(screens.some(([title]) => title.includes('Renamed')));
@@ -154,6 +156,7 @@ test('main and project menus dispatch every action to the chosen project, retain
     '4. Open project folder',
     '5. Back up project records',
     '6. Review unfinished studies',
+    '7. Search study history',
     '0. Back to main menu',
   ]);
 });

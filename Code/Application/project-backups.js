@@ -325,9 +325,13 @@ export async function restoreProjectBackup(
         const removed = new Set(reset.runIds);
         const edits = [
           ...db
-            .prepare("SELECT * FROM project_events WHERE kind='history_rationales_edited'")
+            .prepare(
+              "SELECT * FROM project_events WHERE kind IN ('history_rationales_edited','history_studies_edited')",
+            )
             .all(),
-          ...archive.tables.project_events.filter((e) => e.kind === 'history_rationales_edited'),
+          ...archive.tables.project_events.filter((e) =>
+            ['history_rationales_edited', 'history_studies_edited'].includes(e.kind),
+          ),
         ];
         if (edits.some((e) => JSON.parse(e.data).edits?.some((edit) => removed.has(edit.runId))))
           throw new Error(conflict);

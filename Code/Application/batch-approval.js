@@ -303,7 +303,9 @@ export function cancelBatch(file, jobIds, expectedFingerprint) {
       store.db.prepare('DELETE FROM recommendations WHERE run_id=?').run(runId);
     }
     for (const event of store.db
-      .prepare("SELECT * FROM project_events WHERE kind='history_rationales_edited'")
+      .prepare(
+        "SELECT * FROM project_events WHERE kind IN ('history_rationales_edited','history_studies_edited')",
+      )
       .all()) {
       const data = JSON.parse(event.data);
       const edits = data.edits.filter((e) => !removed.has(e.runId));

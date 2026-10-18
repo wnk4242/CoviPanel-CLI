@@ -64,6 +64,7 @@ export async function reviewBatch(
     statusLabel = 'Batch complete',
     startIndex = 0,
     editable = false,
+    decisionEditable = false,
     approval = false,
   } = {},
 ) {
@@ -74,9 +75,11 @@ export async function reviewBatch(
     offset = 0;
   const footer = approval
     ? 'C: confirm ALL and submit | S: save decisions without submitting | Y/N/M: change decision | E: change rationale | X: cancel batch | Left/Right: study | Up/Down: scroll | Esc: leave pending'
-    : editable
-      ? 'Left/Right: study | Up/Down: scroll | E: edit rationale | Enter/Esc: back'
-      : 'Left/Right: study | Up/Down: scroll | Enter/Esc: back';
+    : decisionEditable
+      ? 'Y/N/M: change decision | E: edit rationale | Up/Down: scroll | Enter/Esc: back'
+      : editable
+        ? 'Left/Right: study | Up/Down: scroll | E: edit rationale | Enter/Esc: back'
+        : 'Left/Right: study | Up/Down: scroll | Enter/Esc: back';
   const layout = () => {
     const columns = output.columns || 100,
       rows = output.rows || 30;
@@ -129,6 +132,8 @@ export async function reviewBatch(
             resolve({ cancelRequested: true });
             return;
           }
+        }
+        if ((approval || decisionEditable) && !key.ctrl && !key.meta) {
           const decision = { y: 'Include', n: 'Exclude', m: 'Maybe' }[key.name];
           if (decision) {
             resolve({ decisionIndex: index, decision });

@@ -1,36 +1,42 @@
-# CoviPanel — Command-line Version
+# CoviPanel — Command-line Edition
 
-**Local Windows CMD application · Public release v1.0**
+**AI-assisted title and abstract screening for evidence synthesis · Version 1.1.0**
 
-CoviPanel supports AI-assisted title and abstract screening in Covidence for librarians, information specialists, and academic researchers. This is the **local command-line version**, launched with **Start CoviPanel.cmd**. The [browser-based CoviPanel](https://github.com/wnk4242/CoviPanel) is a separate application.
+CoviPanel is a local Windows command-line application for librarians, information specialists, and researchers conducting systematic reviews and related evidence syntheses. It applies researcher-defined eligibility criteria to records in Covidence and presents AI recommendations for human assessment before submission. This edition runs through **Start CoviPanel.cmd**; the [browser-based CoviPanel](https://github.com/wnk4242/CoviPanel) is a separate application.
 
-## Key strengths
+## Principal capabilities
 
-- **Review-specific criteria:** define inclusion criteria, exclusion criteria, and the format of AI explanations for each project.
-- **Human oversight:** inspect abstracts and recommendations, edit decisions or rationales, and explicitly confirm before submission.
-- **Batch preparation:** prepare recommendations together, with AI Yes and Maybe studies presented first for review.
-- **Flexible completion:** submit confirmed votes through CoviPanel or save decisions locally for manual voting.
-- **Traceable records:** retain original AI responses separately from human edits and submission records.
-- **Continuity and exports:** resume compatible pending work, retain separate project histories, and export decisions and rationales to Excel.
+- **Protocol-based screening.** Separate inclusion criteria, exclusion criteria, and response instructions support the requirements of each review.
+- **Researcher oversight.** Abstracts, recommendations, and rationales can be examined before decisions are submitted. Decision and rationale changes require explicit confirmation.
+- **Batch review.** Recommendations are prepared before voting begins. AI Yes and Maybe records appear first, followed by No records.
+- **Documented decisions.** Original AI responses are retained separately from researcher edits and submission records. Decisions and rationales can be exported to Excel.
+- **Flexible completion.** Researchers may submit a confirmed batch through CoviPanel or save its decisions locally for subsequent manual voting.
+- **Continuity between sessions.** Compatible pending batches can be resumed using saved responses; uncertain submissions remain available for investigation.
 
-## Workflow
+## Screening procedure
 
-1. **Configure:** select a Covidence review and save its screening criteria and AI settings.
-2. **Prepare:** choose a batch size and generate recommendations before any voting begins.
-3. **Review:** inspect studies and optionally change decisions or rationales.
-4. **Complete:** press **S** to save the batch without voting, or **C** to confirm submission. Both actions cover the whole batch, including unchanged and unvisited studies, and require **y/yes + Enter**.
+1. Select a Covidence review and save its eligibility criteria and model settings.
+2. Specify a batch size and prepare recommendations.
+3. Examine the records and make any required decision or rationale revisions.
+4. Select **S** to save the entire batch without voting, or **C** to open the final submission confirmation. Both actions include unchanged and unvisited records and require **y/yes + Enter**.
 
-**Esc/Enter** leaves review pending for later. **S** finishes local review and excludes those studies from new batches. **X**, after confirmation, cancels eligible unsubmitted work and deletes its AI responses and edits without creating a response backup.
+**Esc/Enter** leaves the review pending. Saving with **S** completes local review and excludes those records from subsequent batches. Confirmed **X** cancellation deletes eligible unsubmitted responses and edits without creating a response backup.
 
-## Getting started
+## Study history search — new in version 1.1
 
-**Requirements:** Windows, Node.js 22.13 or newer, access to a Covidence review, and an OpenAI API key.
+Project-menu option **7. Search study history** retrieves a record by its exact Covidence study number, such as `#123`. Researchers can inspect available source responses and recorded vote status and confirm local decision or rationale corrections. These corrections update the applicable Excel history sheets while preserving original responses, recorded online votes, and pending batch decisions. Search and local editing require no AI request or online vote.
+
+## Installation
+
+Windows, **Node.js 22.13 or newer**, access to the intended Covidence review, and an OpenAI API key are required.
 
 1. Run **Set Up This Computer.cmd** to install dependencies and Chromium.
-2. Enter your own API key in `Setups/Settings/.env`.
+2. Configure your own API key in `Setups/Settings/.env`.
 3. Run **Start CoviPanel.cmd**, create a project, and sign in to Covidence when prompted.
-4. Save your criteria and model settings, then start screening.
+4. Save the screening criteria and model settings before preparing a batch.
 
-## Research use and privacy
+Fictional examples are provided in [examples/demo](examples/demo/README.md).
 
-AI recommendations support researcher judgement; screening accuracy must be evaluated for the intended review. Study information and screening instructions are sent to the OpenAI API, and new recommendations may incur charges. Keep credentials, browser sessions, and research records private.
+## Research use and data handling
+
+AI recommendations support researcher judgement; screening performance requires evaluation for the intended review. Study information and screening instructions are sent to the OpenAI API, and new recommendations may incur charges. Credentials, browser sessions, and research records should remain private and be managed according to institutional requirements.
