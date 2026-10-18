@@ -6,6 +6,14 @@ CoviPanel supports title and abstract screening in Covidence for librarians, inf
 
 Launch this edition with **Start CoviPanel.cmd**. The [browser-based CoviPanel](https://github.com/wnk4242/CoviPanel) is a separate application.
 
+## Interface preview
+
+These screenshots render the application's screen output using [fictional demo records](examples/demo/README.md) and illustrative recommendations. Terminal styling may vary.
+
+**Project menu.** Access screening, settings, exports, backups, and study-history search from one project.
+
+![CoviPanel project menu with screening, settings, export, backup, and study-history options](docs/screenshots/project-menu.png)
+
 ## Core capabilities
 
 - **Review-specific criteria.** Define inclusion criteria, exclusion criteria, and response instructions separately for each project.
@@ -22,9 +30,13 @@ Launch this edition with **Start CoviPanel.cmd**. The [browser-based CoviPanel](
 
 Both actions include unchanged and unvisited records and require **y/yes + Enter** confirmation. **Esc/Enter** preserves a pending batch for later review and submission. Records saved with **S** are excluded from subsequent screening batches. Confirmed **X** cancellation deletes eligible unsubmitted responses and edits without creating a response backup.
 
+![CoviPanel batch review showing a fictional abstract, recommendation, rationale, and review controls](docs/screenshots/batch-review.png)
+
 ## Study history search
 
 Version 1.1 adds **7. Search study history**, which retrieves a record by its exact Covidence study number, such as `#123`. Researchers can inspect available original AI responses and recorded vote status, then confirm local decision or rationale corrections. These corrections update the applicable Excel history sheets without changing original AI responses, recorded online votes, or pending batch decisions. These operations use local records and do not request AI recommendations or submit votes.
+
+![CoviPanel study-history result showing the local decision, saved abstract, original response, and editing controls](docs/screenshots/study-history.png)
 
 ## Installation
 
