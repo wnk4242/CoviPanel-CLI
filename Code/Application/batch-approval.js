@@ -370,8 +370,12 @@ export async function reviewPendingBatch(
     const counts = Object.keys(decisionMap)
       .map((d) => `${decisionMap[d]}: ${entries.filter((e) => e.draft.decision === d).length}`)
       .join(' | ');
+    const studyNumbers = entries.map((e) => `#${e.studyId}`).join(', ');
     const lines = entries.map((e) => [
       counts,
+      '',
+      studyNumbers,
+      '',
       `Study #${e.studyId}: ${e.recommendation.study.title}`,
       `AI: ${decisionMap[e.recommendation.record.decision]} | Your decision: ${decisionMap[e.draft.decision]}`,
       '',
