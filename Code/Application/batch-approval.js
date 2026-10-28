@@ -10,6 +10,8 @@ import { reviewBatch } from './batch-review.js';
 import { createTerminal } from './terminal-input.js';
 import { exportProjectHistory } from './history-export.js';
 
+const reviewDecisionOrder = { Maybe: 0, Include: 1, Exclude: 2 };
+
 function entriesFor(store, jobIds) {
   const entries = [];
   for (const jobId of jobIds) {
@@ -356,11 +358,11 @@ export async function reviewPendingBatch(
   while (true) {
     const snapshot = readApprovalBatch(file, jobIds);
     if (!snapshot.entries.length) return false;
-    // Keep the initial AI Yes/Maybe group together even when the user changes its decision.
+    // Group by the original AI decision, keeping page order stable through human edits.
     const entries = [...snapshot.entries].sort(
       (a, b) =>
-        Number(a.recommendation.record.decision === 'Exclude') -
-        Number(b.recommendation.record.decision === 'Exclude'),
+        reviewDecisionOrder[a.recommendation.record.decision] -
+        reviewDecisionOrder[b.recommendation.record.decision],
     );
     if (selected)
       index = Math.max(

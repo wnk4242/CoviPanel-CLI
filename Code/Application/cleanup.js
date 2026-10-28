@@ -135,7 +135,7 @@ export async function assertBrowserClosed(
     );
 }
 
-export const cleanupSize = (bytes) =>
+const cleanupSize = (bytes) =>
   bytes < 1024
     ? `${bytes} B`
     : bytes < 1048576

@@ -274,7 +274,7 @@ test('browser orchestration does not reopen a browser while a prepared batch wai
   }
 });
 
-test('review viewer sorts AI Yes/Maybe first, makes optional edits and confirms every study without individual approval', async () => {
+test('review viewer sorts Maybe, Yes, then No by AI decision and keeps order after edits', async () => {
   const f = await fixture();
   try {
     await f.run();
@@ -294,12 +294,12 @@ test('review viewer sorts AI Yes/Maybe first, makes optional edits and confirms 
       load: async () => f.config,
       view: async (_name, lines, options) => {
         assert.equal(options.approval, true);
-        assert.match(lines[0].join('\n'), /Study #2/);
-        assert.match(lines[1].join('\n'), /Study #3/);
+        assert.match(lines[0].join('\n'), /Study #3/);
+        assert.match(lines[1].join('\n'), /Study #2/);
         assert.match(lines[2].join('\n'), /Study #1/);
         assert.match(lines[0].join('\n'), /Synthetic abstract/);
-        if (step++ === 0) return { decisionIndex: 1, decision: 'Include' };
-        assert.match(lines[1].join('\n'), /Your decision: Yes/);
+        if (step++ === 0) return { decisionIndex: 0, decision: 'Include' };
+        assert.match(lines[0].join('\n'), /Your decision: Yes/);
         return { confirmed: true };
       },
     });
@@ -330,7 +330,7 @@ test('decision, rationale and submission prompts require affirmative answers bef
       text = '';
     };
     const draft = () =>
-      readApprovalBatch(f.file, [f.job.id]).entries.find((e) => e.studyId === '2').draft;
+      readApprovalBatch(f.file, [f.job.id]).entries.find((e) => e.studyId === '3').draft;
     const review = reviewPendingBatch('Fixture', f.file, [f.job.id], {
       input,
       output,
@@ -363,7 +363,7 @@ test('decision, rationale and submission prompts require affirmative answers bef
       input.write('e');
       await waitFor('New rationale (Enter keeps current wording): ');
       input.write('Confirmed replacement.\r');
-      await waitFor('Save this rationale for study #2? [y/N]: ');
+      await waitFor('Save this rationale for study #3? [y/N]: ');
       assert.equal(draft().rationale, beforeRationale);
       input.write(`${answer}\r`);
       await waitFor('C: confirm ALL');

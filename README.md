@@ -1,6 +1,6 @@
 # CoviPanel Command-line Edition
 
-**Title and abstract screening in Covidence · Version 1.1.0**
+**Title and abstract screening in Covidence · Version 1.1.1**
 
 CoviPanel supports title and abstract screening in Covidence for librarians, information specialists, and researchers conducting systematic reviews. The Windows command-line application combines artificial intelligence (AI) recommendations with researcher review, explicit submission confirmation, and a local decision history.
 
@@ -17,7 +17,7 @@ These screenshots render the application's screen output using [fictional demo r
 ## Core capabilities
 
 - **Review-specific criteria.** Define inclusion criteria, exclusion criteria, and response instructions separately for each project.
-- **Review before submission.** Prepare recommendations for a batch, inspect abstracts, and confirm any decision or rationale changes. AI Yes and Maybe records appear first, followed by No records.
+- **Review before submission.** Prepare recommendations for a batch, inspect abstracts, and confirm any decision or rationale changes. Studies are grouped by their original AI decision in the order Maybe, Yes, No; edits do not reorder pages during that review.
 - **Auditable records.** Retain original AI responses separately from researcher edits and submission records, and export decisions and rationales to Excel.
 - **Session continuity.** Resume compatible pending batches using saved responses, with uncertain submissions retained for investigation.
 
